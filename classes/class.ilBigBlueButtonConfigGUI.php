@@ -113,11 +113,11 @@ class ilBigBlueButtonConfigGUI extends ilPluginConfigGUI
         $form->addItem($choose_recording);
         
         //Guest
-        $choose_guest = new ilCheckboxInputGUI($pl->txt("guest_global_choose"), "guest_global_choose");
-        $choose_guest->setRequired(false);
-        $choose_guest->setInfo($pl->txt("guest_global_choose_info"));
-        $choose_guest->setChecked((int) $values['guest_global_choose']);
-        $form->addItem($choose_guest);
+        $guest_global_choose = new ilCheckboxInputGUI($pl->txt("guest_global_choose"), "guest_global_choose");
+        $guest_global_choose->setRequired(false);
+        $guest_global_choose->setInfo($pl->txt("guest_global_choose_info"));
+        $guest_global_choose->setChecked((int) $values['guest_global_choose']);
+        $form->addItem($guest_global_choose);
 	    
 	//Learning Dashboard
 	$learning_dashboard = new ilCheckboxInputGUI($pl->txt("enable_learningdashboard"), "enable_learningdashboard");
@@ -158,14 +158,15 @@ class ilBigBlueButtonConfigGUI extends ilPluginConfigGUI
             $num = $ilDB->numRows($result);
             if ($num == 0) {
                 $ilDB->manipulate("INSERT INTO rep_robj_xbbb_conf ".
-                "(id, svrpublicurl , svrprivateurl, svrsalt, choose_recording) VALUES (".
+                "(id, svrpublicurl , svrprivateurl, svrsalt, choose_recording, guestglobalchoose, enable_learningdashboard) VALUES (".
                 $ilDB->quote(1, "integer").",". // id
                 $ilDB->quote($setPublicURL, "text").",". //public url
                 $ilDB->quote($setPrivateURL, "text").",". //private url
 
                 $ilDB->quote($setSalt, "text").",". //salt
-                $ilDB->quote($choose_recording, "integer").
-                $ilDB->quote($guest_global_choose, "integer").
+                $ilDB->quote($choose_recording, "integer").",".
+                $ilDB->quote($guest_global_choose, "integer").",".
+		$ilDB->quote($learning_dashboard, "integer").
                 ")");
             } else {
                 $ilDB->manipulate(
@@ -173,8 +174,9 @@ class ilBigBlueButtonConfigGUI extends ilPluginConfigGUI
                 " svrpublicurl = ".$ilDB->quote($setPublicURL, "text").",".
                 " svrprivateurl = ".$ilDB->quote($setPublicURL, "text").",".
                 " svrsalt = ".$ilDB->quote($setSalt, "text"). ",".
-                " choose_recording = ".$ilDB->quote($choose_recording, "integer"). ",".
-                "guestglobalchoose = ". $ilDB->quote($guest_global_choose, "integer").
+                " choose_recording = ".$ilDB->quote($choose_recording, "integer").",".
+                " guestglobalchoose = ". $ilDB->quote($guest_global_choose, "integer").",".
+		" enable_learningdashboard = ". $ilDB->quote($learning_dashboard, "integer").
                 " WHERE id = ".$ilDB->quote(1, "integer")
                 );
             }
