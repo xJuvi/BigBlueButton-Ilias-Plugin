@@ -315,3 +315,14 @@ if (!$ilDB->tableColumnExists("rep_robj_xbbb_data", "allow_download")){
 	
 }
 ?>
+<#9>
+<?php
+if (!$ilDB->tableColumnExists("rep_robj_xbbb_conf", "enable_learningdashboard")){
+	$ilDB->addTableColumn('rep_robj_xbbb_conf', 'enable_learningdashboard', array(
+		'type' => 'integer',
+		'length' => 1,
+		'notnull' => true,
+		'default' => 0
+	));
+}
+?>
