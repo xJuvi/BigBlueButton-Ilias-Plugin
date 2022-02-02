@@ -62,6 +62,7 @@ class ilBigBlueButtonConfigGUI extends ilPluginConfigGUI
             $values["svrsalt"] = $record["svrsalt"];
             $values["choose_recording"] = $record["choose_recording"];
             $values["guest_global_choose"] = $record["guestglobalchoose"];
+	    $values["enable_learningdashboard"] = $record["enable_learningdashboard"];
         }
 
 
@@ -112,11 +113,18 @@ class ilBigBlueButtonConfigGUI extends ilPluginConfigGUI
         $form->addItem($choose_recording);
         
         //Guest
-        $choose_recording = new ilCheckboxInputGUI($pl->txt("guest_global_choose"), "guest_global_choose");
-        $choose_recording->setRequired(false);
-        $choose_recording->setInfo($pl->txt("guest_global_choose_info"));
-        $choose_recording->setChecked((int) $values['guest_global_choose']);
-        $form->addItem($choose_recording);
+        $choose_guest = new ilCheckboxInputGUI($pl->txt("guest_global_choose"), "guest_global_choose");
+        $choose_guest->setRequired(false);
+        $choose_guest->setInfo($pl->txt("guest_global_choose_info"));
+        $choose_guest->setChecked((int) $values['guest_global_choose']);
+        $form->addItem($choose_guest);
+	    
+	//Learning Dashboard
+	$learning_dashboard = new ilCheckboxInputGUI($pl->txt("enable_learningdashboard"), "enable_learningdashboard");
+        $learning_dashboard->setRequired(false);
+        $learning_dashboard->setInfo($pl->txt("enable_learningdashboard_info"));
+        $learning_dashboard->setChecked((int) $values['enable_learningdashboard']);
+        $form->addItem($learning_dashboard);
 
 
         $form->addCommandButton("save", $lng->txt("save"));
@@ -143,6 +151,7 @@ class ilBigBlueButtonConfigGUI extends ilPluginConfigGUI
             $setSalt= $form->getInput("frmsalt");
             $choose_recording = (int) $form->getInput("choose_recording");
             $guest_global_choose = (int) $form->getInput("guest_global_choose");
+	    $learning_dashboard = (int) $form->getInput("enable_learningdashboard");
 
             // check if data exisits decide to update or insert
             $result = $ilDB->query("SELECT * FROM rep_robj_xbbb_conf");
