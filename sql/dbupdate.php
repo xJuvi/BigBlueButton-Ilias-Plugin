@@ -327,3 +327,15 @@ if ($ilDB->tableColumnExists("rep_robj_xbbb_conf", "svrprivateurl")){
 	$ilDB->dropTableColumn('rep_robj_xbbb_conf','svrprivateurl');	
 }
 ?>
+<#10>
+<?php
+if (!$ilDB->tableColumnExists("rep_robj_xbbb_conf", "connect_timeout")){
+	$ilDB->addTableColumn('rep_robj_xbbb_conf','connect_timeout', array(
+		'type' => 'integer',
+		'length' => 2,
+		'notnull' => false,
+		'default' => 10
+	));
+	
+}
+?>
