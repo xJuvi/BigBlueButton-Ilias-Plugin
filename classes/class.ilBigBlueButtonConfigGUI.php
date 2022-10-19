@@ -56,11 +56,13 @@ class ilBigBlueButtonConfigGUI extends ilPluginConfigGUI
 
         $values = array();
         $result = $ilDB->query("SELECT * FROM rep_robj_xbbb_conf");
-        while ($record = $ilDB->fetchAssoc($result)) {
-            $values["svrpublicurl"] = $record["svrpublicurl"];
-            $values["svrsalt"] = $record["svrsalt"];
-            $values["choose_recording"] = $record["choose_recording"];
-            $values["guest_global_choose"] = $record["guestglobalchoose"];
+        while ($record = $ilDB->fetchAssoc($result))
+	{
+            	$values["svrpublicurl"] = $record["svrpublicurl"];
+            	$values["svrsalt"] = $record["svrsalt"];
+            	$values["choose_recording"] = $record["choose_recording"];
+            	$values["guest_global_choose"] = $record["guestglobalchoose"];
+		$values["connect_timeout"] = $record["connect_timeout"];
         }
 
 
@@ -94,6 +96,15 @@ class ilBigBlueButtonConfigGUI extends ilPluginConfigGUI
         $pi->setRetype(false);
         $pi->setValue($values["svrsalt"]);
         $form->addItem($pi);
+	    
+	//api connect timeout
+	$timeout = new ilTextInputGUI($pl->txt("connect_timeout"), "connect_timeout");
+        $timeout->setRequired(true);
+        $timeout->setMinValue(1);
+	$timeout->setMaxValue(90);
+        $timeout->setSize(60);
+        $timeout->setValue($values["connect_timeout"]);
+        $form->addItem($timeout);
 
         //recording configuration
         $choose_recording = new ilCheckboxInputGUI($pl->txt("choose_recording"), "choose_recording");
@@ -133,6 +144,7 @@ class ilBigBlueButtonConfigGUI extends ilPluginConfigGUI
             $setSalt= $form->getInput("frmsalt");
             $choose_recording = (int) $form->getInput("choose_recording");
             $guest_global_choose = (int) $form->getInput("guest_global_choose");
+		$connect_timeout = (int) $form->getInput("connect_timeout");
 
             // check if data exisits decide to update or insert
             $result = $ilDB->query("SELECT * FROM rep_robj_xbbb_conf");
@@ -144,7 +156,8 @@ class ilBigBlueButtonConfigGUI extends ilPluginConfigGUI
                 $ilDB->quote($setPublicURL, "text").",". //public url
                 $ilDB->quote($setSalt, "text").",". //salt
                 $ilDB->quote($choose_recording, "integer").",".
-                $ilDB->quote($guest_global_choose, "integer").
+                $ilDB->quote($guest_global_choose, "integer").",".
+		$ilDB->quote($connect_timeout, "integer").
                 ")");
             } else {
                 $ilDB->manipulate(
@@ -152,7 +165,8 @@ class ilBigBlueButtonConfigGUI extends ilPluginConfigGUI
                 " svrpublicurl = ".$ilDB->quote($setPublicURL, "text").",".
                 " svrsalt = ".$ilDB->quote($setSalt, "text"). ",".
                 " choose_recording = ".$ilDB->quote($choose_recording, "integer"). ",".
-                "guestglobalchoose = ". $ilDB->quote($guest_global_choose, "integer").
+                " guestglobalchoose = ". $ilDB->quote($guest_global_choose, "integer"). ",".
+		" connect_timeout = ". $ilDB->quote($connect_timeout, "integer").
                 " WHERE id = ".$ilDB->quote(1, "integer")
                 );
             }
