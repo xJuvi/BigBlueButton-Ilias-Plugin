@@ -32,6 +32,7 @@ class ilBigBlueButtonProtocol
     {
         $this->object = $object;
         $this->bbb = new BBB($this->object->getSvrSalt(), $this->object->getSvrPublicURL());
+	$this->bbb->setTimeOut($this->object->getConnectTimeOut());
     }
     public function getAvatar()
     {
