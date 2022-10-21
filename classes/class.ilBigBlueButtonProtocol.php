@@ -30,8 +30,21 @@ class ilBigBlueButtonProtocol
 
     public function __construct($object)
     {
-        $this->object = $object;
-        $this->bbb = new BBB($this->object->getSvrSalt(), $this->object->getSvrPublicURL());
+        //Add Proxy to CURL options
+	$curlopts = array();
+	require_once('Services/Http/classes/class.ilProxySettings.php');
+	if(ilProxySettings::_getInstance()->isActive())
+	{
+		$proxyHost = ilProxySettings::_getInstance()->getHost();
+		$proxyPort = ilProxySettings::_getInstance()->getPort();
+		$proxyurl = $proxyHost . ":" . $proxyPort;
+
+		$curlopts['CURLOPT_PROXY'] = $proxyurl;
+	}
+	    
+	$this->object = $object;
+        $this->bbb = new BBB($this->object->getSvrSalt(), $this->object->getSvrPublicURL(), $curlopts);
+	$this->bbb->setTimeOut($this->object->getConnectTimeOut());
     }
     public function getAvatar()
     {
@@ -231,13 +244,5 @@ class BBB extends \BigBlueButton\BigBlueButton
         $this->securitySecret = $securitySecret;
         $this->bbbServerBaseUrl = $baseUrl;
         $this->urlBuilder       = new UrlBuilder($this->securitySecret, $this->bbbServerBaseUrl);
-        //Add Proxy
-		require_once('Services/Http/classes/class.ilProxySettings.php');
-		if(ilProxySettings::_getInstance()->isActive())
-		{
-			$proxyHost = ilProxySettings::_getInstance()->getHost();
-			$proxyPort = ilProxySettings::_getInstance()->getPort();
-			$this->proxyurl = $proxyHost . ":" . $proxyPort;
-		}
     }
 }
