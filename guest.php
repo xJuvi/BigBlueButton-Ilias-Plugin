@@ -1,8 +1,9 @@
 <?php
 // enable display errors only on dev systems
-//ini_set('display_errors', 1);
+ini_set('display_errors', 1);
 ini_set('error_reporting', 5);
 
+use Exception;
 use BigBlueButton\Core\Record;
 use BigBlueButton\Parameters\CreateMeetingParameters;
 use BigBlueButton\Responses\GetMeetingsResponse;
