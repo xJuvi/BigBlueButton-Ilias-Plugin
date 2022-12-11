@@ -16,10 +16,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-      - name: Install dependencies
-        uses: php-actions/composer@v6
-        with:
-          dev: no
       - name: Install Composer dependencies
         run: composer install
       - name: Check Syntax (Lint)
