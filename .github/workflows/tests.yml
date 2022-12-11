@@ -16,6 +16,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+        with:
+          dev: no
       - name: Check Syntax (Lint)
         run: |
           find . -type f -name '*.php' -print0 | xargs -0 -n1 -P4 php -l -n | (! grep -v 'No syntax errors detected')
