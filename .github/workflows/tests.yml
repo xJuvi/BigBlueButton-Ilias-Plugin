@@ -20,6 +20,8 @@ jobs:
         uses: php-actions/composer@v6
         with:
           dev: no
+      - name: Install Composer dependencies
+        run: composer install
       - name: Check Syntax (Lint)
         run: |
           find . -type f -name '*.php' -print0 | xargs -0 -n1 -P4 php -l -n | (! grep -v 'No syntax errors detected')
