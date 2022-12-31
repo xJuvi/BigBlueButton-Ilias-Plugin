@@ -68,7 +68,7 @@ class ilBigBlueButtonConfigGUI extends ilPluginConfigGUI
         if ($values["svrpublicurl"] != '' && $values["svrsalt"] != '') {
             $server_reachable=$this->isServerReachable($values["svrpublicurl"], $values["svrsalt"]);
             if (!$server_reachable) {
-                ilUtil::sendFailure("server not reachable", true);
+                ilUtil::sendFailure($pl->txt("sever_not_reachable"), true);
             }
         }
 
@@ -178,12 +178,11 @@ class ilBigBlueButtonConfigGUI extends ilPluginConfigGUI
         include_once("./Customizing/global/plugins/Services/Repository/RepositoryObject/BigBlueButton/classes/class.ilBigBlueButtonProtocol.php");
         $bbb_helper=new BBB($salt,$url);
         try{
-            $bbb_helper->getApiVersion();
+            $apiVersion = $bbb_helper->getApiVersion();
+	    return $apiVersion->success();
         }catch (Exception $e) {
             return false;
         }
-        return true;
-
     }
 
 
